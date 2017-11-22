@@ -29,8 +29,8 @@ timing
 *.hex
 *.html
 *.jdi
-*.jpg
-*.mif
+#*.jpg
+#*.mif
 *.pin
 *.pof
 *.ptf.*
