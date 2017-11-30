@@ -7,35 +7,34 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-dC:/Users/spratiman/Dropbox/Pratiman/Higher Education/Computer Science/Third Year/CSC258/Project/CSC258_Project
+Z0 dC:/Users/spratiman/Dropbox/Pratiman/Higher Education/Computer Science/Third Year/CSC258/Project/CSC258_Project
 vcontrol
-Z0 !s110 1512069609
+Z1 !s110 1512070079
 !i10b 1
 !s100 ZCbQecd[]1Ho13Il55[]91
-I_XFcki5Gl_f`Z279bH:1W3
-Z1 VDg1SIo80bB@j0V0VzS_@n1
-Z2 dC:/Users/Jaska/CSC258_Project
-Z3 w1512069533
+I_P;QSlL9DHe:87U4O79Zk0
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z3 w1512070068
 Z4 8plotfour_top.v
 Z5 Fplotfour_top.v
 L0 573
-Z6 OV;L;10.5b;63
+Z6 OV;L;10.4d;61
 r1
 !s85 0
 31
-Z7 !s108 1512069609.000000
+Z7 !s108 1512070078.000000
 Z8 !s107 plotfour_top.v|
 Z9 !s90 -reportprogress|300|-timescale|1ns/1ns|plotfour_top.v|
 !i113 1
 Z10 o-timescale 1ns/1ns
-Z11 tCvgOpt 0
 vcounter
-R0
+R1
 !i10b 1
 !s100 _zB@bRe8HYo18hW[F2OmC3
-IcUVQ7c:Oi@Uz64dUnGa8F3
-R1
+I7Ccma^oE9<LSh4?j[Xb<C3
 R2
+R0
 R3
 R4
 R5
@@ -49,14 +48,13 @@ R8
 R9
 !i113 1
 R10
-R11
 vdatapath
-R0
+R1
 !i10b 1
 !s100 DWQjTJRo2VR3?XZ8D`5PD0
-I;InmE6XTUHDU>DK7:GSWb2
-R1
+IV4RXCI66L@FjPzji[jZ>f2
 R2
+R0
 R3
 R4
 R5
@@ -70,14 +68,13 @@ R8
 R9
 !i113 1
 R10
-R11
 vfsm_controller
-R0
+R1
 !i10b 1
 !s100 ;O];UgeK@6HlKaoMMN32G2
-Ih>J^m^W]K<mK`N37bIAj31
-R1
+Ia:N@Pf9K8lIKb3I0dZJmO1
 R2
+R0
 R3
 R4
 R5
@@ -91,14 +88,13 @@ R8
 R9
 !i113 1
 R10
-R11
 vhex_decoder
-R0
+R1
 !i10b 1
 !s100 Ao5AfA7M0PIoElUG_Ch5P1
-IYIS6SMH4`PO6=dK^VQ:Xb3
-R1
+IBR>8<U0CngVdEcA_JcglV1
 R2
+R0
 R3
 R4
 R5
@@ -112,14 +108,13 @@ R8
 R9
 !i113 1
 R10
-R11
 vplotfour_top
-R0
-!i10b 1
-!s100 h`^6;Iz0N<d?^[i7Ta?TO2
-I]d46Pc6CiYLPF9g<aD83C1
 R1
+!i10b 1
+!s100 9lL8ACkIEPCE3@k@Yh=oO3
+IOPeY2OklO7`EjhoePEGEe3
 R2
+R0
 R3
 R4
 R5
@@ -133,14 +128,13 @@ R8
 R9
 !i113 1
 R10
-R11
 vrate_counter
-R0
+R1
 !i10b 1
 !s100 @FJQRK?^HhLfbRUd[9B3Y1
-I@X_e^4G0K_Gogon=CY^FI1
-R1
+I9^TiF@<eIBe6LdR4^GAmz2
 R2
+R0
 R3
 R4
 R5
@@ -154,4 +148,3 @@ R8
 R9
 !i113 1
 R10
-R11

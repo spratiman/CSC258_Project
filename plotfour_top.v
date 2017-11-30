@@ -233,7 +233,6 @@ module fsm_controller (resetn, p_one, p_two, start, square, p_one_win, p_two_win
 			end
 			else
 			begin
-			p_two_win <= 1;
 				case(square)
 					6'b000000: if(turn == 1 && blue[0]==0  && red[0]==0) 	 begin red[0]<=1;  turn<=0; end
 					6'b000001: if(turn == 1 && blue[1]==0  && red[1]==0) 	 begin red[1]<=1;  turn<=0; end
@@ -284,15 +283,15 @@ module fsm_controller (resetn, p_one, p_two, start, square, p_one_win, p_two_win
 	
 	always @(*)
 		begin
-			if(blue[0] == 1 && blue[6] == 1 && blue[12] == 1 && blue[18] == 1)
+			if(blue[0] == 1 && blue[7] == 1 && blue[14] == 1 && blue[21] == 1)
 			begin p_one_win <= 1; end
-			else if (blue[6] == 1 && blue[12] == 1 && blue[18] == 1 && blue[24] == 1)
+			else if (blue[7] == 1 && blue[14] == 1 && blue[21] == 1 && blue[28] == 1)
 			begin p_one_win <= 1; end
-			else if (blue[12] == 1 && blue[18] == 1 && blue[24] == 1 && blue[30] == 1)
-			begin p_one_win <= 1; end
-			else if (blue[18] == 1 && blue[24] == 1 && blue[30] == 1 && blue[36] == 1)
+			else if (blue[14] == 1 && blue[21] == 1 && blue[28] == 1 && blue[35] == 1)
 			begin p_one_win <= 1; end
 			else if (blue[0] == 1 && blue[1] == 1 && blue[2] == 1 && blue[3] == 1)
+			begin p_one_win <= 1; end
+			else if (blue[0] == 1 && blue[8] == 1 && blue[16] == 1 && blue[24] == 1)
 			begin p_one_win <= 1; end
 			else
 			begin p_one_win <= 0; end
@@ -305,15 +304,15 @@ module fsm_controller (resetn, p_one, p_two, start, square, p_one_win, p_two_win
 		
 	always @(*)
 		begin
-			if(red[0] == 1 && red[6] == 1 && red[12] == 1 && red[18] == 1)
+			if(red[0] == 1 && red[7] == 1 && red[14] == 1 && red[21] == 1)
 			begin p_two_win <= 1; end
-			else if (red[6] == 1 && red[12] == 1 && red[18] == 1 && red[24] == 1)
+			else if (red[7] == 1 && red[14] == 1 && red[21] == 1 && red[28] == 1)
 			begin p_two_win <= 1; end
-			else if (red[12] == 1 && red[18] == 1 && red[24] == 1 && red[30] == 1)
-			begin p_two_win <= 1; end
-			else if (red[18] == 1 && red[24] == 1 && red[30] == 1 && red[36] == 1)
+			else if (red[14] == 1 && red[21] == 1 && red[28] == 1 && red[35] == 1)
 			begin p_two_win <= 1; end
 			else if (red[0] == 1 && red[1] == 1 && red[2] == 1 && red[3] == 1)
+			begin p_two_win <= 1; end
+			else if (red[0] == 1 && red[8] == 1 && red[16] == 1 && red[24] == 1)
 			begin p_two_win <= 1; end
 			else
 			begin p_two_win <= 0; end
