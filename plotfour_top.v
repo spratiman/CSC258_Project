@@ -7,7 +7,7 @@ module plotfour_top (
 	HEX1,
 	HEX2,
 	HEX3,
-	LEDR
+	LEDR,
 	// The ports below are for the VGA output.  Do not change.
 	VGA_CLK,   								//	VGA Clock
 	VGA_HS,									//	VGA H_SYNC
