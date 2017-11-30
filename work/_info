@@ -1,0 +1,70 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/spratiman/Dropbox/Pratiman/Higher Education/Computer Science/Third Year/CSC258/Project/CSC258_Project
+vfsm_controller
+Z1 !s110 1512013272
+!i10b 1
+!s100 M41N2bZQ>VCA2mQPf2eMW1
+IEAeo?zC9RUzBRGG_RmhRZ0
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z3 w1512013244
+Z4 8plotfour_top.v
+Z5 Fplotfour_top.v
+L0 155
+Z6 OV;L;10.4d;61
+r1
+!s85 0
+31
+Z7 !s108 1512013272.000000
+Z8 !s107 plotfour_top.v|
+Z9 !s90 -reportprogress|300|-timescale|1ns/1ns|plotfour_top.v|
+!i113 1
+Z10 o-timescale 1ns/1ns
+vhex_decoder
+R1
+!i10b 1
+!s100 f>C@GD4T1WRFYe2P2T6:]2
+I3K<PN<cCE;EEOn=>4]Go`0
+R2
+R0
+R3
+R4
+R5
+L0 327
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+vplotfour_top
+R1
+!i10b 1
+!s100 [A3[k;TCF<U3aDo<im2Q>3
+IA<KM^Ude=K>Ld2fX`I0FZ0
+R2
+R0
+R3
+R4
+R5
+L0 2
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
