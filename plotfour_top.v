@@ -40,7 +40,7 @@ module plotfour_top (
 	output	[9:0]	VGA_B;   				//	VGA Blue[9:0] 
 	
 	wire resetn, start, p_one, p_two, p_one_win, p_two_win;
-	assign resetn = KEY[0];
+	assign resetn = ~KEY[0];
 	assign start = KEY[3];					//Game is by default in START mode if unpressed, if pressed game is in STOP mode
 	assign p_one = ~KEY[1];
 	assign p_two = ~KEY[2];
@@ -51,8 +51,7 @@ module plotfour_top (
 	wire [2:0] colour;
 	wire [7:0] x;
 	wire [6:0] y;
-	wire writeEn;
-	wire enable;
+	wire writeEn, enable;
 	
 	// Create an Instance of a VGA controller - there can be only one!
 	// Define the number of colours as well as the initial background
@@ -81,31 +80,31 @@ module plotfour_top (
     datapath d0(SW[5:0], CLOCK_50, KEY[0], KEY[1], KEY[2], enable, x, y, colour);
 
     // Instansiate FSM control
-    control c0(~KEY[1], ~KEY[2], KEY[0], CLOCK_50, enable, writeEn);
+    control c0(~KEY[1], ~KEY[2], ~KEY[0], CLOCK_50, enable, writeEn);
 	
 	/* Player turn indicator [START] */
 	reg p_one_status, p_two_status;
 	
 	always @(*) 
 	begin
-		if(start && p_one)
+		if(start==1'b1 && p_one==1'b1)
 		begin
-			p_one_status <= 1;
+			p_one_status <= 1'b1;
 		end
-		else if (!start)
+		else
 		begin
-			p_one_status <= 0;
+			p_one_status <= 1'b0;
 		end
 	end
 	always @(*)
 	begin
-		if(start && p_two)
+		if(start==1'b1 && p_two==1'b1)
 		begin
-			p_two_status <= 1;
+			p_two_status <= 1'b1;
 		end
-		else if (!start)
+		else
 		begin
-			p_two_status <= 0;
+			p_two_status <= 1'b0;
 		end
 	end
 	
@@ -131,7 +130,7 @@ module plotfour_top (
 	wire [41:0] blue_square;
 	wire [41:0] red_square;
 	wire turn; 
-	wire [3:0] p_one_score, p_two_score;
+	wire p_one_score, p_two_score;
 		
 	fsm_controller fsm(
 		.resetn(resetn),
@@ -166,25 +165,25 @@ module fsm_controller (resetn, p_one, p_two, start, square, p_one_win, p_two_win
 	
 	always @(*)
 	begin
-		if(resetn)
+		if(resetn==1'b1)
 		begin
 			blue 		<= 1'b0;
 			red  		<= 1'b0;
-			p_one_win 	<= 0;
-			p_two_win   <= 0;
-			turn        <= 0;
-			p_one_score <= 4'h0;
-			p_two_score <= 4'h0;
+			//p_one_win 	<= 1'b0;
+			//p_two_win   <= 1'b0;
+			turn        <= 1'b0;
+			//p_one_score <= 4'h0;
+			//p_two_score <= 4'h0;
 		end
-		else if (!start)
+		else if (start==1'b0)
 		begin
-			p_one_win <= 0;
-			p_two_win <= 0;
-			turn      <= 1;
+			//p_one_win <= 1'b0;
+			//p_two_win <= 1'b0;
+			turn      <= 1'b1;
 		end
-		else if (start==1 && p_one_win==0 && p_two_win==0)
+		else if (start==1'b1 && p_one_win==1'b0 && p_two_win==1'b0)
 		begin
-			if (p_one==1)
+			if (p_one==1'b1)
 			begin
 				case(square)
 					6'b000000: if(turn == 1 && blue[0]==0  && red[0]==0) 	 begin blue[0]<=1;  turn<=0; end
@@ -284,44 +283,50 @@ module fsm_controller (resetn, p_one, p_two, start, square, p_one_win, p_two_win
 	always @(*)
 		begin
 			if(blue[0] == 1 && blue[7] == 1 && blue[14] == 1 && blue[21] == 1)
-			begin p_one_win <= 1; end
+			begin p_one_win <= 1'b1; p_one_score <= 1'b1; end
 			else if (blue[7] == 1 && blue[14] == 1 && blue[21] == 1 && blue[28] == 1)
-			begin p_one_win <= 1; end
+			begin p_one_win <= 1'b1; p_one_score <= 1'b1; end
 			else if (blue[14] == 1 && blue[21] == 1 && blue[28] == 1 && blue[35] == 1)
-			begin p_one_win <= 1; end
+			begin p_one_win <= 1'b1; p_one_score <= 1'b1; end
 			else if (blue[0] == 1 && blue[1] == 1 && blue[2] == 1 && blue[3] == 1)
-			begin p_one_win <= 1; end
+			begin p_one_win <= 1'b1; p_one_score <= 1'b1; end
 			else if (blue[0] == 1 && blue[8] == 1 && blue[16] == 1 && blue[24] == 1)
-			begin p_one_win <= 1; end
+			begin p_one_win <= 1'b1; p_one_score <= 1'b1; end
 			else
-			begin p_one_win <= 0; end
+			begin p_one_win <= 1'b0; p_one_score <= 1'b0; end
 		end
 	
-	always @(posedge p_one_win)
-		begin
-			p_one_score <= p_one_score + 4'h1;
-		end
+//	always @(*)
+//	begin
+//		if(p_one_win==1)
+//		begin
+//			p_one_score <= 4'h1;
+//		end
+//	end
 		
 	always @(*)
 		begin
 			if(red[0] == 1 && red[7] == 1 && red[14] == 1 && red[21] == 1)
-			begin p_two_win <= 1; end
+			begin p_two_win <= 1'b1; p_two_score <= 1'b1; end
 			else if (red[7] == 1 && red[14] == 1 && red[21] == 1 && red[28] == 1)
-			begin p_two_win <= 1; end
+			begin p_two_win <= 1'b1; p_two_score <= 1'b1; end
 			else if (red[14] == 1 && red[21] == 1 && red[28] == 1 && red[35] == 1)
-			begin p_two_win <= 1; end
+			begin p_two_win <= 1'b1; p_two_score <= 1'b1; end
 			else if (red[0] == 1 && red[1] == 1 && red[2] == 1 && red[3] == 1)
-			begin p_two_win <= 1; end
+			begin p_two_win <= 1'b1; p_two_score <= 1'b1; end
 			else if (red[0] == 1 && red[8] == 1 && red[16] == 1 && red[24] == 1)
-			begin p_two_win <= 1; end
+			begin p_two_win <= 1'b1; p_two_score <= 1'b1; end
 			else
-			begin p_two_win <= 0; end
+			begin p_two_win <= 1'b0; p_two_score <= 1'b1; end
 		end
 	
-	always @(posedge p_two_win)
-		begin
-			p_two_score <= p_two_score + 4'h1;
-		end
+//	always @(*)
+//	begin
+//		if(p_two_win==1)
+//		begin
+//			p_two_score <= 4'h1;
+//		end
+//	end
 
 	
 endmodule
@@ -335,10 +340,10 @@ module datapath(data_in, clock, reset_n, p_1, p_2, enable, X, Y, Colour);
 	reg 	[8:0] 	x1;
 	reg		[7:0]   y1;
 	reg 	[2:0]   c1;
-	wire	[1:0] 	controlA, controlB, controlC;
+	wire	[3:0] 	controlA, controlB, controlC;
 
 	always @ (posedge clock) begin
-        if (reset_n) begin
+        if (!reset_n) begin
             x1 <= 8'b0;
             y1 <= 7'b0;
 			c1 <= 3'b0;
@@ -380,7 +385,7 @@ module datapath(data_in, clock, reset_n, p_1, p_2, enable, X, Y, Colour);
 			end
 			else if (data_in == 6'b000111) begin		// BOX 7
 				x1 <= 8'b00000010;
-				y1 <= 7'b0010101;
+				y1 <= 7'b0010110;
 			end
 			else if (data_in == 6'b001000) begin		// BOX 8
 				x1 <= 8'b00011000;
@@ -408,7 +413,7 @@ module datapath(data_in, clock, reset_n, p_1, p_2, enable, X, Y, Colour);
 			end
 			else if (data_in == 6'b001110) begin		// BOX 14
 				x1 <= 8'b00000010;
-				y1 <= 7'b0101000;
+				y1 <= 7'b0101010;
 			end
 			else if (data_in == 6'b001111) begin		// BOX 15
 				x1 <= 8'b00011000;
@@ -436,7 +441,7 @@ module datapath(data_in, clock, reset_n, p_1, p_2, enable, X, Y, Colour);
 			end
 			else if (data_in == 6'b010101) begin		// BOX 21
 				x1 <= 8'b00000010;
-				y1 <= 7'b0111011;
+				y1 <= 7'b0111110;
 			end
 			else if (data_in == 6'b010110) begin		// BOX 22
 				x1 <= 8'b00011000;
@@ -464,7 +469,7 @@ module datapath(data_in, clock, reset_n, p_1, p_2, enable, X, Y, Colour);
 			end
 			else if (data_in == 6'b011100) begin		// BOX 28
 				x1 <= 8'b00000010;
-				y1 <= 7'b1001110;
+				y1 <= 7'b1010001;
 			end
 			else if (data_in == 6'b011101) begin		// BOX 29
 				x1 <= 8'b00011000;
@@ -492,7 +497,7 @@ module datapath(data_in, clock, reset_n, p_1, p_2, enable, X, Y, Colour);
 			end
 			else if (data_in == 6'b100011) begin		// BOX 35
 				x1 <= 8'b00000010;
-				y1 <= 7'b1100001;
+				y1 <= 7'b1100101;
 			end
 			else if (data_in == 6'b100100) begin		// BOX 36
 				x1 <= 8'b00011000;
@@ -533,18 +538,18 @@ endmodule
 
 module counter(clock, reset_n, enable, q);
 	input clock, reset_n, enable;
-	output reg [1:0] q;
+	output reg [3:0] q;
 
 	always @(posedge clock) begin
 		if (reset_n == 1'b0) begin
-			q <= 2'b00;
+			q <= 4'b0000;
 		end
 		else if (enable == 1'b1) begin
-			if (q == 2'b11) begin
-				q <= 2'b00;
+			if (q == 4'b1111) begin
+				q <= 4'b0000;
 			end
 		  	else begin
-			  	q <= q + 1'b1;
+			  	q <= q + 3'b111;
 			end
 		end
 	end
@@ -552,18 +557,18 @@ endmodule
 
 module rate_counter(clock, reset_n, enable, q);
 	input clock, reset_n, enable;
-	output reg [1:0] q;
+	output reg [3:0] q;
 
 	always @(posedge clock) begin
 		if (reset_n == 1'b0) begin
-			q <= 2'b11;
+			q <= 4'b1111;
 		end
 		else if (enable == 1'b1) begin
-		   	if (q == 2'b00) begin
-				q <= 2'b11;
+		   	if (q == 4'b0000) begin
+				q <= 4'b1111;
 			end
 			else begin
-				q <= q - 1'b1;
+				q <= q - 3'b111;
 			end
 		end
 	end

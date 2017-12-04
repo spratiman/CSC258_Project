@@ -28,17 +28,16 @@ module plotfourVGA
 	output	[9:0]	VGA_R;   				//	VGA Red[9:0]
 	output	[9:0]	VGA_B;   				//	VGA Blue[9:0]
 
-	wire resetn, p_one, p_two;
+	wire resetn, p1, p2;
 	assign resetn = KEY[0];
-	assign p_one = KEY[1];
-	assign p_two = KEY[2];
+	assign p1 = KEY[1];
+	assign p2 = KEY[2];
 
 	// Create the colour, x, y and writeEn wires that are inputs to the controller.
 	wire [2:0] colour;
 	wire [7:0] x;
 	wire [6:0] y;
-	wire writeEn;
-	wire enable;
+	wire writeEn, enable;
 
 	// Create an Instance of a VGA controller - there can be only one!
 	// Define the number of colours as well as the initial background
@@ -82,10 +81,10 @@ module datapath(data_in, clock, reset_n, p_1, p_2, enable, X, Y, Colour);
 	reg 	[8:0] 	x1;
 	reg		[7:0]   y1;
 	reg 	[2:0]   c1;
-	wire	[1:0] 	controlA, controlB, controlC;
+	wire	[3:0] 	controlA, controlB, controlC;
 
 	always @ (posedge clock) begin
-        if (reset_n) begin
+        if (!reset_n) begin
             x1 <= 8'b0;
             y1 <= 7'b0;
 			c1 <= 3'b0;
@@ -127,143 +126,143 @@ module datapath(data_in, clock, reset_n, p_1, p_2, enable, X, Y, Colour);
 			end
 			else if (data_in == 6'b000111) begin		// BOX 7
 				x1 <= 8'b00000010;
-				y1 <= 7'b0010101;
+				y1 <= 7'b0010110;
 			end
 			else if (data_in == 6'b001000) begin		// BOX 8
 				x1 <= 8'b00011000;
-				y1 <= 7'b0010101;
+				y1 <= 7'b0010110;
 			end
 			else if (data_in == 6'b001001) begin		// BOX 9
 				x1 <= 8'b00101110;
-				y1 <= 7'b0010101;
+				y1 <= 7'b0010110;
 			end
 			else if (data_in == 6'b001010) begin		// BOX 10
 				x1 <= 8'b01000100;
-				y1 <= 7'b0010101;
+				y1 <= 7'b0010110;
 			end
 			else if (data_in == 6'b001011) begin		// BOX 11
 				x1 <= 8'b01011010;
-				y1 <= 7'b0010101;
+				y1 <= 7'b0010110;
 			end
 			else if (data_in == 6'b001100) begin		// BOX 12
 				x1 <= 8'b01110000;
-				y1 <= 7'b0010101;
+				y1 <= 7'b0010110;
 			end
 			else if (data_in == 6'b001101) begin		// BOX 13
 				x1 <= 8'b10000110;
-				y1 <= 7'b0010101;
+				y1 <= 7'b0010110;
 			end
 			else if (data_in == 6'b001110) begin		// BOX 14
 				x1 <= 8'b00000010;
-				y1 <= 7'b0101000;
+				y1 <= 7'b0101010;
 			end
 			else if (data_in == 6'b001111) begin		// BOX 15
 				x1 <= 8'b00011000;
-				y1 <= 7'b0101000;
+				y1 <= 7'b0101010;
 			end
 			else if (data_in == 6'b010000) begin		// BOX 16
 				x1 <= 8'b00101110;
-				y1 <= 7'b0101000;
+				y1 <= 7'b0101010;
 			end
 			else if (data_in == 6'b010001) begin		// BOX 17
 				x1 <= 8'b01000100;
-				y1 <= 7'b0101000;
+				y1 <= 7'b0101010;
 			end
 			else if (data_in == 6'b010010) begin		// BOX 18
 				x1 <= 8'b01011010;
-				y1 <= 7'b0101000;
+				y1 <= 7'b0101010;
 			end
 			else if (data_in == 6'b010011) begin		// BOX 19
 				x1 <= 8'b01110000;
-				y1 <= 7'b0101000;
+				y1 <= 7'b0101010;
 			end
 			else if (data_in == 6'b010100) begin		// BOX 20
 				x1 <= 8'b10000110;
-				y1 <= 7'b0101000;
+				y1 <= 7'b0101010;
 			end
 			else if (data_in == 6'b010101) begin		// BOX 21
 				x1 <= 8'b00000010;
-				y1 <= 7'b0111011;
+				y1 <= 7'b0111110;
 			end
 			else if (data_in == 6'b010110) begin		// BOX 22
 				x1 <= 8'b00011000;
-				y1 <= 7'b0111011;
+				y1 <= 7'b0111110;
 			end
 			else if (data_in == 6'b010111) begin		// BOX 23
 				x1 <= 8'b00101110;
-				y1 <= 7'b0111011;
+				y1 <= 7'b0111110;
 			end
 			else if (data_in == 6'b011000) begin		// BOX 24
 				x1 <= 8'b01000100;
-				y1 <= 7'b0111011;
+				y1 <= 7'b0111110;
 			end
 			else if (data_in == 6'b011001) begin		// BOX 25
 				x1 <= 8'b01011010;
-				y1 <= 7'b0111011;
+				y1 <= 7'b0111110;
 			end
 			else if (data_in == 6'b011010) begin		// BOX 26
 				x1 <= 8'b01110000;
-				y1 <= 7'b0111011;
+				y1 <= 7'b0111110;
 			end
 			else if (data_in == 6'b011011) begin		// BOX 27
 				x1 <= 8'b10000110;
-				y1 <= 7'b0111011;
+				y1 <= 7'b0111110;
 			end
 			else if (data_in == 6'b011100) begin		// BOX 28
 				x1 <= 8'b00000010;
-				y1 <= 7'b1001110;
+				y1 <= 7'b1010001;
 			end
 			else if (data_in == 6'b011101) begin		// BOX 29
 				x1 <= 8'b00011000;
-				y1 <= 7'b1001110;
+				y1 <= 7'b1010001;
 			end
 			else if (data_in == 6'b011110) begin		// BOX 30
 				x1 <= 8'b00101110;
-				y1 <= 7'b1001110;
+				y1 <= 7'b1010001;
 			end
 			else if (data_in == 6'b011111) begin		// BOX 31
 				x1 <= 8'b01000100;
-				y1 <= 7'b1001110;
+				y1 <= 7'b1010001;
 			end
 			else if (data_in == 6'b100000) begin		// BOX 32
 				x1 <= 8'b01011010;
-				y1 <= 7'b1001110;
+				y1 <= 7'b1010001;
 			end
 			else if (data_in == 6'b100001) begin		// BOX 33
 				x1 <= 8'b01110000;
-				y1 <= 7'b1001110;
+				y1 <= 7'b1010001;
 			end
 			else if (data_in == 6'b100010) begin		// BOX 34
 				x1 <= 8'b10000110;
-				y1 <= 7'b1001110;
+				y1 <= 7'b1010001;
 			end
 			else if (data_in == 6'b100011) begin		// BOX 35
 				x1 <= 8'b00000010;
-				y1 <= 7'b1100001;
+				y1 <= 7'b1100101;
 			end
 			else if (data_in == 6'b100100) begin		// BOX 36
 				x1 <= 8'b00011000;
-				y1 <= 7'b1100001;
+				y1 <= 7'b1100101;
 			end
 			else if (data_in == 6'b100101) begin		// BOX 37
 				x1 <= 8'b00101110;
-				y1 <= 7'b1100001;
+				y1 <= 7'b1100101;
 			end
 			else if (data_in == 6'b100110) begin		// BOX 38
 				x1 <= 8'b01000100;
-				y1 <= 7'b1100001;
+				y1 <= 7'b1100101;
 			end
 			else if (data_in == 6'b100111) begin		// BOX 39
 				x1 <= 8'b01011010;
-				y1 <= 7'b1100001;
+				y1 <= 7'b1100101;
 			end
 			else if (data_in == 6'b101000) begin		// BOX 40
 				x1 <= 8'b01110000;
-				y1 <= 7'b1100001;
+				y1 <= 7'b1100101;
 			end
 			else if (data_in == 6'b101001) begin		// BOX 41
 				x1 <= 8'b10000110;
-				y1 <= 7'b1100001;
+				y1 <= 7'b1100101;
 			end
         end
     end
@@ -280,18 +279,18 @@ endmodule
 
 module counter(clock, reset_n, enable, q);
 	input clock, reset_n, enable;
-	output reg [1:0] q;
+	output reg [3:0] q;
 
 	always @(posedge clock) begin
 		if (reset_n == 1'b0) begin
-			q <= 2'b00;
+			q <= 4'b0000;
 		end
 		else if (enable == 1'b1) begin
-			if (q == 2'b11) begin
-				q <= 2'b00;
+			if (q == 4'b1111) begin
+				q <= 4'b0000;
 			end
 		  	else begin
-			  	q <= q + 1'b1;
+			  	q <= q + 3'b111;
 			end
 		end
 	end
@@ -299,18 +298,18 @@ endmodule
 
 module rate_counter(clock, reset_n, enable, q);
 	input clock, reset_n, enable;
-	output reg [1:0] q;
+	output reg [3:0] q;
 
 	always @(posedge clock) begin
 		if (reset_n == 1'b0) begin
-			q <= 2'b11;
+			q <= 4'b1111;
 		end
 		else if (enable == 1'b1) begin
-		   	if (q == 2'b00) begin
-				q <= 2'b11;
+		   	if (q == 4'b0000) begin
+				q <= 4'b1111;
 			end
 			else begin
-				q <= q - 1'b1;
+				q <= q - 3'b111;
 			end
 		end
 	end
@@ -321,7 +320,6 @@ module control (go_p1, go_p2, reset_n, clock, enable, plot);
 	output reg enable, plot;
 
 	always@(*) begin
-		// By default make all our signals 0
 		enable = 1'b0;
 		plot = 1'b0;
 
