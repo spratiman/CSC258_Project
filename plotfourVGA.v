@@ -2,41 +2,36 @@ module plotfourVGA
 	(
 		CLOCK_50,						//	On Board 50 MHz
 		// Your inputs and outputs here
-      KEY,								// KEY[3]: START, KEY[1]: P_one, KEY[2]: P_two, KEY[0]: resetn 
+		KEY,								// KEY[3]: START, KEY[1]: P_one, KEY[2]: P_two, KEY[0]: resetn 
 		SW,								// SW[0:5]: Input square number
 		HEX0,
 		HEX1,
-		HEX2,
-		HEX3,
 		LEDR,
 		// The ports below are for the VGA output.  Do not change.
 		VGA_CLK,   						//	VGA Clock
 		VGA_HS,							//	VGA H_SYNC
 		VGA_VS,							//	VGA V_SYNC
-		VGA_BLANK_N,						//	VGA BLANK
+		VGA_BLANK_N,					//	VGA BLANK
 		VGA_SYNC_N,						//	VGA SYNC
 		VGA_R,   						//	VGA Red[9:0]
 		VGA_B   						//	VGA Blue[9:0]
 	);
 
-	input				 CLOCK_50;				//	50 MHz
+	input		    CLOCK_50;			//	50 MHz
 	input   [5:0]   SW;
 	input   [3:0]   KEY;
 	//P square selection
 	output  [6:0] 	HEX0;
 	output  [6:0] 	HEX1;
-	//P_one_score
-	output  [6:0]	HEX2;
-	//P-two_score
-	output  [6:0]	HEX3;
-	output  [0:4] 	LEDR;					// LEDR[1]: p_one turn, LEDR[2]: p_two turn, LEDR[3]: p_one_win, LEDR[4]: p_two_win
+	// LEDR[1]: p_one turn, LEDR[2]: p_two turn, LEDR[3]: p_one_win, LEDR[4]: p_two_win
+	output  [0:4] 	LEDR;					
 
 	// Declare your inputs and outputs here
 	// Do not change the following outputs
 	output			VGA_CLK;   				//	VGA Clock
 	output			VGA_HS;					//	VGA H_SYNC
 	output			VGA_VS;					//	VGA V_SYNC
-	output			VGA_BLANK_N;				//	VGA BLANK
+	output			VGA_BLANK_N;			//	VGA BLANK
 	output			VGA_SYNC_N;				//	VGA SYNC
 	output	[9:0]	VGA_R;   				//	VGA Red[9:0]
 	output	[9:0]	VGA_B;   				//	VGA Blue[9:0]
@@ -44,8 +39,8 @@ module plotfourVGA
 	wire resetn, p_one, p_two, start, p_one_win, p_two_win;
 	assign resetn = KEY[0];
 	assign start = KEY[3];
-	assign p_1 = KEY[1];
-	assign p_2 = KEY[2];
+	assign p_1 = KEY[2];
+	assign p_2 = KEY[1];
 	assign p_one_win = LEDR[3];
 	assign p_two_win = LEDR[4];
 
@@ -58,7 +53,7 @@ module plotfourVGA
 	// Create an Instance of a VGA controller - there can be only one!
 	// Define the number of colours as well as the initial background
 	// image file (.MIF) for the controller.
-	vga_adapter VGA(
+	/*vga_adapter VGA(
 			.resetn(resetn),
 			.clock(CLOCK_50),
 			.colour(colour),
@@ -66,7 +61,7 @@ module plotfourVGA
 			.y(y),
 			.plot(writeEn),
 			/* Signals for the DAC to drive the monitor. */
-			.VGA_R(VGA_R),
+			/*.VGA_R(VGA_R),
 			.VGA_B(VGA_B),
 			.VGA_HS(VGA_HS),
 			.VGA_VS(VGA_VS),
@@ -76,43 +71,38 @@ module plotfourVGA
 		defparam VGA.RESOLUTION = "160x120";
 		defparam VGA.MONOCHROME = "FALSE";
 		defparam VGA.BITS_PER_COLOUR_CHANNEL = 1;
-		defparam VGA.BACKGROUND_IMAGE = "grid.mif";
+		defparam VGA.BACKGROUND_IMAGE = "grid.mif";*/
 
 	// Put your code here. Your code should produce signals x,y,colour and writeEn/plot
 	// for the VGA controller, in addition to any other functionality your design may require.
 
     // Instansiate datapath
-      datapath d0(SW[5:0], CLOCK_50, KEY[0], KEY[1], KEY[2], enable, x, y, colour);
+    /*  datapath d0(SW[5:0], CLOCK_50, KEY[0], KEY[1], KEY[2], enable, x, y, colour);
 
     // Instansiate FSM control
-    control c0(~KEY[1], ~KEY[2], KEY[0], CLOCK_50, enable, writeEn);
+    control c0(~KEY[1], ~KEY[2], KEY[0], CLOCK_50, enable, writeEn);*/
 	 
 	 /* Player turn indicator [START] */
 	reg p_one_status, p_two_status;
 	
-	always @(*) 
+	always @(start) 
 	begin
-		if(start==1'b1 && p_one==1'b1)
+		if(p_1==1'b1)
 		begin
 			p_one_status <= 1'b1;
 		end
-		else
-		begin
-			p_one_status <= 1'b0;
-		end
-	end
-	always @(*)
-	begin
-		if(start==1'b1 && p_two==1'b1)
+		else if(p_2==1'b1)
 		begin
 			p_two_status <= 1'b1;
 		end
 		else
 		begin
+			p_one_status <= 1'b0;
 			p_two_status <= 1'b0;
 		end
 	end
 	
+	//assign LEDR[1] = p_one_status;
 	assign LEDR[1] = p_one_status;
 	assign LEDR[2] = p_two_status;
 	/* Player turn indicator [END] */
@@ -134,59 +124,49 @@ module plotfourVGA
 		
 	wire [41:0] blue_square;
 	wire [41:0] red_square;
-	wire turn; 
-	wire p_one_score, p_two_score;
+	wire turn;
 	
 	fsm_controller fsm(
 		.resetn(~resetn),
-		.p_one(~p_1),
-		.p_two(~KEY[2]),
+		.p_one(p_1),
+		.p_two(p_2),
 		.start(start),
 		.square(SW[5:0]),
 		.p_one_win(LEDR[3]),
 		.p_two_win(LEDR[4]),
 		.blue(blue_square),
 		.red(red_square),
-		.turn(turn),
-		.p_one_score(p_one_score),
-		.p_two_score(p_two_score)
-	);
-	
-	hex_decoder h2(
-		.hex_digit(p_one_score),
-		.segments(HEX2)
+		.turn(turn)
 	);
 	 
 endmodule
 
-module fsm_controller (resetn, p_one, p_two, start, square, p_one_win, p_two_win, blue, red, turn, p_one_score, p_two_score);
+module fsm_controller (resetn, p_one, p_two, start, square, p_one_win, p_two_win, blue, red, turn);
 	
 	input [5:0] square;
 	input resetn, p_one, p_two, start;
-	output reg [3:0] p_one_score, p_two_score;
 	output reg p_one_win, p_two_win;
 	output reg turn;
 	output reg [41:0] blue, red;
 	
+	
 	always @(*)
 	begin
-		if(resetn==1'b1)
+		if(resetn==1'b0)
 		begin
 			blue 		<= 1'b0;
 			red  		<= 1'b0;
 			//p_one_win 	<= 1'b0;
 			//p_two_win   <= 1'b0;
 			turn        <= 1'b0;
-			//p_one_score <= 4'h0;
-			//p_two_score <= 4'h0;
 		end
 		else if (start==1'b0)
 		begin
 			//p_one_win <= 1'b0;
 			//p_two_win <= 1'b0;
 			turn      <= 1'b1;
-		end
-		else if (start==1'b1 && p_one_win==1'b0 && p_two_win==1'b0)
+		end	
+		else if (start == 1'b1 && p_one_win==1'b0 && p_two_win==1'b0)
 		begin
 			if (p_one==1'b1)
 			begin
@@ -287,52 +267,61 @@ module fsm_controller (resetn, p_one, p_two, start, square, p_one_win, p_two_win
 	
 	always @(*)
 		begin
+			//===Vertical 0==
 			if(blue[0] == 1 && blue[7] == 1 && blue[14] == 1 && blue[21] == 1)
-			begin p_one_win <= 1'b1; p_one_score <= 1'b1; end
+			begin p_one_win <= 1'b1; end
 			else if (blue[7] == 1 && blue[14] == 1 && blue[21] == 1 && blue[28] == 1)
-			begin p_one_win <= 1'b1; p_one_score <= 1'b1; end
+			begin p_one_win <= 1'b1; end
 			else if (blue[14] == 1 && blue[21] == 1 && blue[28] == 1 && blue[35] == 1)
-			begin p_one_win <= 1'b1; p_one_score <= 1'b1; end
+			begin p_one_win <= 1'b1; end
+			//==Horizontal 0==
 			else if (blue[0] == 1 && blue[1] == 1 && blue[2] == 1 && blue[3] == 1)
-			begin p_one_win <= 1'b1; p_one_score <= 1'b1; end
+			begin p_one_win <= 1'b1; end
+			else if (blue[1] == 1 && blue[2] == 1 && blue[3] == 1 && blue[4] == 1)
+			begin p_one_win <= 1'b1; end
+			else if (blue[2] == 1 && blue[3] == 1 && blue[4] == 1 && blue[5] == 1)
+			begin p_one_win <= 1'b1; end
+			else if (blue[3] == 1 && blue[4] == 1 && blue[5] == 1 && blue[6] == 1)
+			begin p_one_win <= 1'b1; end
+			//==Diagonal 0==
 			else if (blue[0] == 1 && blue[8] == 1 && blue[16] == 1 && blue[24] == 1)
-			begin p_one_win <= 1'b1; p_one_score <= 1'b1; end
+			begin p_one_win <= 1'b1; end
+			else if (blue[8] == 1 && blue[16] == 1 && blue[24] == 1 && blue[32] == 1)
+			begin p_one_win <= 1'b1; end
+			else if (blue[16] == 1 && blue[24] == 1 && blue[32] == 1 && blue[40] == 1)
+			begin p_one_win <= 1'b1; end
 			else
-			begin p_one_win <= 1'b0; p_one_score <= 1'b0; end
+			begin p_one_win <= 1'b0; end
 		end
-	
-//	always @(*)
-//	begin
-//		if(p_one_win==1)
-//		begin
-//			p_one_score <= 4'h1;
-//		end
-//	end
 		
 	always @(*)
 		begin
+			//===Vertical 0==
 			if(red[0] == 1 && red[7] == 1 && red[14] == 1 && red[21] == 1)
-			begin p_two_win <= 1'b1; p_two_score <= 1'b1; end
+			begin p_two_win <= 1'b1; end
 			else if (red[7] == 1 && red[14] == 1 && red[21] == 1 && red[28] == 1)
-			begin p_two_win <= 1'b1; p_two_score <= 1'b1; end
+			begin p_two_win <= 1'b1; end
 			else if (red[14] == 1 && red[21] == 1 && red[28] == 1 && red[35] == 1)
-			begin p_two_win <= 1'b1; p_two_score <= 1'b1; end
+			begin p_two_win <= 1'b1; end
+			//==Horizontal 0==
 			else if (red[0] == 1 && red[1] == 1 && red[2] == 1 && red[3] == 1)
-			begin p_two_win <= 1'b1; p_two_score <= 1'b1; end
+			begin p_two_win <= 1'b1; end
+			else if (red[1] == 1 && red[2] == 1 && red[3] == 1 && red[4] == 1)
+			begin p_two_win <= 1'b1; end
+			else if (red[2] == 1 && red[3] == 1 && red[4] == 1 && red[5] == 1)
+			begin p_two_win <= 1'b1; end
+			else if (red[3] == 1 && red[4] == 1 && red[5] == 1 && red[6] == 1)
+			begin p_two_win <= 1'b1; end
+			//==Diagonal 0==
 			else if (red[0] == 1 && red[8] == 1 && red[16] == 1 && red[24] == 1)
-			begin p_two_win <= 1'b1; p_two_score <= 1'b1; end
+			begin p_two_win <= 1'b1; end
+			else if (red[8] == 1 && red[16] == 1 && red[24] == 1 && red[32] == 1)
+			begin p_two_win <= 1'b1; end
+			else if (red[16] == 1 && red[24] == 1 && red[32] == 1 && red[40] == 1)
+			begin p_two_win <= 1'b1; end
 			else
-			begin p_two_win <= 1'b0; p_two_score <= 1'b1; end
+			begin p_two_win <= 1'b0; end
 		end
-	
-//	always @(*)
-//	begin
-//		if(p_two_win==1)
-//		begin
-//			p_two_score <= 4'h1;
-//		end
-//	end
-
 	
 endmodule
 

@@ -1,8 +1,8 @@
 vlib work
 
-vlog -timescale 1ns/1ns plotfour_top.v
+vlog -timescale 1ns/1ns plotfourVGA.v
 
-vsim plotfour_top
+vsim plotfourVGA
 
 log {/*}
 add wave {/*}
@@ -18,7 +18,7 @@ add wave {/*}
 #140: HEX0: 1 and Nothing should be displayed on HEX1, LEDR1, LEDR2, LEDR3, LEDR4
 #160: HEX0: 1, LEDR2: 1 and Nothing should be displayed on HEX1, LEDR1, LEDR3, LEDR4
 
-force {KEY}   1111 0, 0010 20, 0011 40, 0010 59, 0011 60, 0010 79, 0011 80, 0010 99, 0011 100, 0010 119, 0011 120, 1111 139, 0100 140, 0101 160 -r 180
-force {SW} 	000000 0, 000001 20, 000000 40, 000110 60, 001100 80, 010010 100, 011000 120, 000001 140, 000001 160 -r 180
+force {KEY}   1001 0, 0100 20, 1100 40, 0100 59, 1100 60, 0100 79, 1100 80, 0100 99, 1100 100, 0100 119, 1100 120, 0001 139, 0010 140, 1010 160 -r 180
+force {SW} 	000000 0, 000001 20, 000000 40, 000111 60, 001110 80, 010101 100, 011000 120, 000001 140, 000001 160 -r 180
 
 run 180ns
